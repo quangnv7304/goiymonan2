@@ -2,7 +2,11 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
 from typing import List, Dict, Any, Optional
-from agent import OnlineLearningAgent # <-- Đổi sang OnlineLearningAgent
+try:
+    from q_learning.sarsa_agent import OnlineLearningAgent
+except ModuleNotFoundError:
+    # Running inside container where files are mounted directly into /app
+    from sarsa_agent import OnlineLearningAgent
 import logging
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
@@ -28,8 +32,8 @@ class FeedbackPayload(BaseModel):
 
 # --- Khởi tạo ---
 app = FastAPI(title="Online Learning AI Service", version="2.1.0")
-# Đổi tên file Q-table nếu muốn, ví dụ q_table_online.json
-agent = OnlineLearningAgent(model_path="q_table_online.json") 
+# Đổi tên file bảng SARSA nếu muốn, ví dụ sarsa_table.json
+agent = OnlineLearningAgent(model_path="sarsa_table.json") 
 
 # --- API Endpoints ---
 @app.post("/predict")

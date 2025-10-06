@@ -3,3 +3,5 @@ uvicorn[standard]
 psycopg2-binary
 filelock
 requests
+gym
+numpy==1.23.5
